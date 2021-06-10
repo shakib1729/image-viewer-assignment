@@ -29,6 +29,7 @@ const images = [
 const mainElement = document.getElementById('main');
 const unorderedListElement = document.querySelector('.img-list');
 const largeImageContainerElement = document.querySelector('.img-container');
+let listIndex = 0;
 
 const createImage = (imageSource, imageTitle) => {
   const imgElement = document.createElement('img');
@@ -103,20 +104,48 @@ const updateLargeImage = (imageSource, imageName) => {
   largeImageTextElement.innerText = imageName;
 };
 
+const updateListIndex = (imgElement) => {
+  const listItems = document.querySelectorAll('li');
+  listItems.forEach((item, index) => {
+    if (item.firstElementChild === imgElement) {
+      listIndex = index;
+    }
+  });
+};
+
 const handleClick = (event) => {
   let parentListElement;
-  if (event.target.tagName.toLowerCase() === 'li') {
+  if (event.target.tagName.toLowerCase() === 'ul') {
+    return;
+  } else if (event.target.tagName.toLowerCase() === 'li') {
     parentListElement = event.target;
   } else {
     parentListElement = event.target.parentElement;
   }
 
-  let currImageElement = parentListElement.firstElementChild;
+  const currImageElement = parentListElement.firstElementChild;
 
+  updateLargeImage(currImageElement.src, currImageElement.alt);
+  setActiveImage(parentListElement);
+  updateListIndex(currImageElement);
+};
+
+const handleKeyPress = (event) => {
+  const listItems = document.querySelectorAll('li');
+  if (event.key === 'ArrowDown') {
+    listIndex++;
+    if (listIndex === listItems.length) listIndex = 0;
+  } else if (event.key === 'ArrowUp') {
+    listIndex--;
+    if (listIndex === -1) listIndex = listItems.length - 1;
+  }
+  const parentListElement = listItems[listIndex];
+  const currImageElement = parentListElement.firstElementChild;
   updateLargeImage(currImageElement.src, currImageElement.alt);
   setActiveImage(parentListElement);
 };
 
 unorderedListElement.addEventListener('click', handleClick);
+document.addEventListener('keydown', handleKeyPress);
 
 displayImageList(images);
