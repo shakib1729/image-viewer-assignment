@@ -30,25 +30,83 @@ const mainElement = document.getElementById('main');
 const unorderedListElement = document.querySelector('.img-list');
 const largeImageContainerElement = document.querySelector('.img-container');
 
-const createListElement = (src, title) => {
-  const listElement = document.createElement('li');
+const createImage = (imageSource, imageTitle) => {
   const imgElement = document.createElement('img');
-  imgElement.src = src;
-  imgElement.alt = title;
+  imgElement.src = imageSource;
+  imgElement.alt = imageTitle;
+  return imgElement;
+};
+
+const createTitle = (imageTitle) => {
   const titleElement = document.createElement('h4');
-  titleElement.innerText = title;
-  listElement.appendChild(imgElement);
-  listElement.appendChild(titleElement);
+  titleElement.innerText = imageTitle;
+  return titleElement;
+};
+
+const createListElement = (imageSource, imageTitle) => {
+  // This function creates a <li> element
+  // which contains <img> and <h4> elements
+  // <img> contains the image
+  // <h4> contains the title of the image
+  const listElement = document.createElement('li');
+  const imgElement = createImage(imageSource, imageTitle);
+  const titleElement = createTitle(imageTitle);
+
   listElement.classList.add('list-item');
   imgElement.classList.add('small-img');
+
+  listElement.appendChild(imgElement);
+  listElement.appendChild(titleElement);
+
   return listElement;
 };
 
+const createLargeImage = (imageSource, imageTitle) => {
+  // This function creates the markup of the large image
+  // which is displayed on the right side
+  const imgElement = createImage(imageSource, imageTitle);
+  const titleElement = createTitle(imageTitle);
+
+  imgElement.classList.add('large-img');
+
+  largeImageContainerElement.appendChild(imgElement);
+  largeImageContainerElement.appendChild(titleElement);
+};
+
 const displayImageList = (imageList) => {
+  // This function renders all the images in the list
   imageList.forEach((img) => {
     const listElement = createListElement(img.previewImage, img.title);
     unorderedListElement.appendChild(listElement);
   });
+  createLargeImage(imageList[0].previewImage, imageList[0].title);
 };
+
+const setActiveImage = (element) => {
+  const currentActiveElement = document.querySelector('.active');
+  if (currentActiveElement) {
+    currentActiveElement.classList.remove('active');
+  }
+  element.classList.add('active');
+};
+
+const updateLargeImage = (imageSource, imageName) => {
+  const largeImageElement = largeImageContainerElement.firstElementChild;
+  const largeImageTextElement = largeImageElement.nextElementSibling;
+
+  largeImageElement.src = imageSource;
+  largeImageElement.alt = imageName;
+  largeImageTextElement.innerText = imageName;
+};
+
+const handleClick = (event) => {
+  const parentElement = event.target.parentElement;
+  const currImageElement = parentElement.firstElementChild;
+
+  updateLargeImage(currImageElement.src, currImageElement.alt);
+  setActiveImage(parentListElement);
+};
+
+unorderedListElement.addEventListener('click', handleClick);
 
 displayImageList(images);
