@@ -11,9 +11,9 @@ body {
 #main {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  grid-gap: 5rem;
-  padding: 3rem;
-  margin: 0 15rem;
+  grid-gap: 1rem;
+  padding: 1rem;
+  margin: 1rem 5rem;
   height: 90vh;
 }
 ul {
@@ -42,7 +42,7 @@ ul {
 
 .large-img {
   height: 45rem;
-  width: 100%;
+  width: 40rem;
   object-fit: cover;
 }
 
@@ -58,21 +58,31 @@ ul {
 
 .list-item h4 {
   padding-left: 1rem;
+  text-overflow: clip;
 }
 
 h4 {
   font-weight: normal;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1250px) {
   #main {
     margin: 0 1rem;
   }
 }
 
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 1000px) {
+  .large-img {
+    height: 35rem;
+    width: 30rem;
+  }
+}
+
+@media screen and (max-width: 760px) {
   #main {
     grid-template-columns: 1fr;
-    margin: 0 1rem;
+  }
+  .large-img {
+    width: 28rem;
   }
 }
