@@ -30,4 +30,25 @@ const mainElement = document.getElementById('main');
 const unorderedListElement = document.querySelector('.img-list');
 const largeImageContainerElement = document.querySelector('.img-container');
 
-console.log(images);
+const createListElement = (src, title) => {
+  const listElement = document.createElement('li');
+  const imgElement = document.createElement('img');
+  imgElement.src = src;
+  imgElement.alt = title;
+  const titleElement = document.createElement('h4');
+  titleElement.innerText = title;
+  listElement.appendChild(imgElement);
+  listElement.appendChild(titleElement);
+  listElement.classList.add('list-item');
+  imgElement.classList.add('small-img');
+  return listElement;
+};
+
+const displayImageList = (imageList) => {
+  imageList.forEach((img) => {
+    const listElement = createListElement(img.previewImage, img.title);
+    unorderedListElement.appendChild(listElement);
+  });
+};
+
+displayImageList(images);
