@@ -3,9 +3,10 @@ import images from './imagesData.js';
 const mainElement = document.getElementById('main');
 const unorderedListElement = document.querySelector('.img-list');
 const largeImageContainerElement = document.querySelector('.img-container');
-let listIndex = 0;
+let listIndex = 0; // The index of currently selected list item
 
 const createImage = (imageSource, imageTitle) => {
+  // This function creates an <img> element
   const imgElement = document.createElement('img');
   imgElement.src = imageSource;
   imgElement.alt = imageTitle;
@@ -13,6 +14,7 @@ const createImage = (imageSource, imageTitle) => {
 };
 
 const createTitle = (imageTitle) => {
+  // This function creates a <h4> element
   const titleElement = document.createElement('h4');
   titleElement.innerText = imageTitle;
   return titleElement;
@@ -60,7 +62,7 @@ const displayImageList = (imageList) => {
 const setActiveImage = (element) => {
   // This function removes the 'active' class from the currently
   // active list item and
-  // adds 'active' class to the 'element'
+  // adds 'active' class to the 'element' which is passed as argument
   const currentActiveElement = document.querySelector('.active');
   if (currentActiveElement) {
     currentActiveElement.classList.remove('active');
@@ -79,6 +81,7 @@ const updateLargeImage = (imageSource, imageName) => {
 };
 
 const updateListIndex = (imgElement) => {
+  // This function updates the index of currently selected list item
   const listItems = document.querySelectorAll('li');
   listItems.forEach((item, index) => {
     if (item.firstElementChild === imgElement) {
@@ -88,6 +91,7 @@ const updateListIndex = (imgElement) => {
 };
 
 const handleClick = (event) => {
+  // This function handles the 'click' event when a list item is clicked
   let parentListElement;
   if (event.target.tagName.toLowerCase() === 'ul') {
     return;
@@ -105,6 +109,7 @@ const handleClick = (event) => {
 };
 
 const handleKeyPress = (event) => {
+  //This function handles when a keyboard arrow up/down is pressed
   const listItems = document.querySelectorAll('li');
   if (event.key === 'ArrowDown') {
     listIndex++;
@@ -122,4 +127,5 @@ const handleKeyPress = (event) => {
 unorderedListElement.addEventListener('click', handleClick);
 document.addEventListener('keydown', handleKeyPress);
 
+// Render the list items
 displayImageList(images);
