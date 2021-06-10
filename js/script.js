@@ -83,6 +83,9 @@ const displayImageList = (imageList) => {
 };
 
 const setActiveImage = (element) => {
+  // This function removes the 'active' class from the currently
+  // active list item and
+  // adds 'active' class to the 'element'
   const currentActiveElement = document.querySelector('.active');
   if (currentActiveElement) {
     currentActiveElement.classList.remove('active');
@@ -91,6 +94,7 @@ const setActiveImage = (element) => {
 };
 
 const updateLargeImage = (imageSource, imageName) => {
+  // This function sets the large image and its title
   const largeImageElement = largeImageContainerElement.firstElementChild;
   const largeImageTextElement = largeImageElement.nextElementSibling;
 
@@ -100,8 +104,14 @@ const updateLargeImage = (imageSource, imageName) => {
 };
 
 const handleClick = (event) => {
-  const parentElement = event.target.parentElement;
-  const currImageElement = parentElement.firstElementChild;
+  let parentListElement;
+  if (event.target.tagName.toLowerCase() === 'li') {
+    parentListElement = event.target;
+  } else {
+    parentListElement = event.target.parentElement;
+  }
+
+  let currImageElement = parentListElement.firstElementChild;
 
   updateLargeImage(currImageElement.src, currImageElement.alt);
   setActiveImage(parentListElement);
