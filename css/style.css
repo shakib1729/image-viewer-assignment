@@ -19,7 +19,7 @@ ul {
   height: 2rem;
   width: 2rem;
   object-fit: cover;
-  margin-right: 1rem;
+  /* margin-right: 1rem; */
 }
 
 .list-item {
@@ -41,4 +41,8 @@ ul {
 
 .img-container {
   text-align: center;
+}
+
+.list-item h4 {
+  padding-left: 1rem;
 }
