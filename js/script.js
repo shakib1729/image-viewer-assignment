@@ -52,8 +52,11 @@ const createLargeImage = (imageSource, imageTitle) => {
 
 const displayImageList = (imageList) => {
   // This function renders all the images in the list
-  imageList.forEach((img) => {
+  imageList.forEach((img, index) => {
     const listElement = createListElement(img.previewImage, img.title);
+    if (index === 0) {
+      listElement.classList.add('active'); // By default, first list item is active
+    }
     unorderedListElement.appendChild(listElement);
   });
   createLargeImage(imageList[0].previewImage, imageList[0].title);
