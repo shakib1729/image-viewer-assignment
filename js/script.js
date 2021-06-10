@@ -13,31 +13,34 @@ const createImage = (imageSource, imageTitle) => {
   return imgElement;
 };
 
-const truncate = (str) => {
-  // This function truncates the title if its length is greater than 25
-  let newStr = str;
-  if (str.length > 25) {
-    newStr = str.slice(0, 10) + '...' + str.slice(str.length - 10);
-  }
+const truncate = (str, maxLen) => {
+  // This function truncates the title if its length is greater than 'maxLen'
+  const currLen = str.length;
+  if (currLen <= maxLen) return str;
+  const leftHalf = Math.floor(maxLen / 2) - 1,
+    rightHalf = Math.floor(maxLen / 2) - 2;
+
+  const newStr =
+    str.slice(0, leftHalf) + '...' + str.slice(currLen - rightHalf);
+
   return newStr;
 };
 
 const createTitle = (imageTitle) => {
   // This function creates a <h4> element
   const titleElement = document.createElement('h4');
-  const truncatedTitle = titleElement;
   titleElement.innerText = imageTitle;
   return titleElement;
 };
 
-const createListElement = (imageSource, imageTitle) => {
+const createListElement = (imageSource, imageTitle, maxLenOfEachTitle) => {
   // This function creates a <li> element
   // which contains <img> and <h4> elements
   // <img> contains the image
   // <h4> contains the title of the image
   const listElement = document.createElement('li');
   const imgElement = createImage(imageSource, imageTitle);
-  const truncatedTitle = truncate(imageTitle);
+  const truncatedTitle = truncate(imageTitle, maxLenOfEachTitle);
   const titleElement = createTitle(truncatedTitle);
 
   listElement.classList.add('list-item');
@@ -61,10 +64,14 @@ const createLargeImage = (imageSource, imageTitle) => {
   largeImageContainerElement.appendChild(titleElement);
 };
 
-const displayImageList = (imageList) => {
+const displayImageList = (imageList, maxLenOfEachTitle) => {
   // This function renders all the images in the list
   imageList.forEach((img, index) => {
-    const listElement = createListElement(img.previewImage, img.title);
+    const listElement = createListElement(
+      img.previewImage,
+      img.title,
+      maxLenOfEachTitle
+    );
     if (index === 0) {
       listElement.classList.add('active'); // By default, first list item is active
     }
@@ -104,6 +111,21 @@ const updateListIndex = (imgElement) => {
   });
 };
 
+const getMaxLenOfEachTitle = () => {
+  // This function calculates the maximum number of characters
+  // which should be present in the list item title
+  // based on the available width for the list element
+
+  const widthOfListItem = unorderedListElement.getBoundingClientRect().width;
+  const listImageElement = document.querySelector('.small-img');
+  let widthOfListImage = 32; // Default width of list images
+  if (listImageElement)
+    widthOfListImage = listImageElement.getBoundingClientRect().width;
+  const availableWidth = widthOfListItem - widthOfListImage;
+  const maxLenOfEachTitle = Math.floor(availableWidth / 10); // 1ch ~ 10px
+  return maxLenOfEachTitle;
+};
+
 const handleClick = (event) => {
   // This function handles the 'click' event when a list item is clicked
   let parentListElement;
@@ -123,7 +145,7 @@ const handleClick = (event) => {
 };
 
 const handleKeyPress = (event) => {
-  //This function handles when a keyboard arrow up/down is pressed
+  // This function handles when a keyboard arrow up/down is pressed
   const listItems = document.querySelectorAll('li');
   if (event.key === 'ArrowDown') {
     listIndex++;
@@ -138,8 +160,19 @@ const handleKeyPress = (event) => {
   setActiveImage(parentListElement);
 };
 
+const handleResize = () => {
+  // This function re-renders the list items when the window is resized
+  unorderedListElement.innerHTML = '';
+  largeImageContainerElement.innerHTML = '';
+
+  const maxLenOfEachTitle = getMaxLenOfEachTitle();
+  displayImageList(images, maxLenOfEachTitle);
+};
+
+window.addEventListener('resize', handleResize);
 unorderedListElement.addEventListener('click', handleClick);
 document.addEventListener('keydown', handleKeyPress);
 
 // Render the list items
-displayImageList(images);
+const maxLenOfEachTitle = getMaxLenOfEachTitle();
+displayImageList(images, maxLenOfEachTitle);
