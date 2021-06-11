@@ -122,7 +122,9 @@ const getMaxLenOfEachTitle = () => {
   if (listImageElement)
     widthOfListImage = listImageElement.getBoundingClientRect().width;
   const availableWidth = widthOfListItem - widthOfListImage;
-  const maxLenOfEachTitle = Math.floor(availableWidth / 10); // 1ch ~ 10px
+  const maxLenOfEachTitle = Math.floor(availableWidth / 8); // 1ch ~ 8px
+
+  console.log(widthOfListItem, maxLenOfEachTitle);
   return maxLenOfEachTitle;
 };
 
@@ -166,6 +168,7 @@ const handleResize = () => {
   largeImageContainerElement.innerHTML = '';
 
   const maxLenOfEachTitle = getMaxLenOfEachTitle();
+
   displayImageList(images, maxLenOfEachTitle);
 };
 
