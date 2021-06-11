@@ -3,6 +3,7 @@ import images from './imagesData.js';
 const mainElement = document.getElementById('main');
 const unorderedListElement = document.querySelector('.img-list');
 const largeImageContainerElement = document.querySelector('.img-container');
+
 let listIndex = 0; // The index of currently selected list item
 
 const createImage = (imageSource, imageTitle) => {
@@ -17,6 +18,7 @@ const truncate = (str, maxLen) => {
   // This function truncates the title if its length is greater than 'maxLen'
   const currLen = str.length;
   if (currLen <= maxLen) return str;
+
   const leftHalf = Math.floor(maxLen / 2) - 1,
     rightHalf = Math.floor(maxLen / 2) - 2;
 
@@ -40,7 +42,7 @@ const createListElement = (imageSource, imageTitle, maxLenOfEachTitle) => {
   // <h4> contains the title of the image
   const listElement = document.createElement('li');
   const imgElement = createImage(imageSource, imageTitle);
-  const truncatedTitle = truncate(imageTitle, maxLenOfEachTitle);
+  const truncatedTitle = truncate(imageTitle, maxLenOfEachTitle); // Get the truncated title
   const titleElement = createTitle(truncatedTitle);
 
   listElement.classList.add('list-item');
@@ -53,7 +55,7 @@ const createListElement = (imageSource, imageTitle, maxLenOfEachTitle) => {
 };
 
 const createLargeImage = (imageSource, imageTitle) => {
-  // This function creates the markup of the large image
+  // This function creates the large image
   // which is displayed on the right side
   const imgElement = createImage(imageSource, imageTitle);
   const titleElement = createTitle(imageTitle);
@@ -116,30 +118,30 @@ const getMaxLenOfEachTitle = () => {
   // which should be present in the list item title
   // based on the available width for the list element
 
-  const widthOfListItem = unorderedListElement.getBoundingClientRect().width;
+  const widthOfListItem = unorderedListElement.getBoundingClientRect().width; // The width of parent list container
   const listImageElement = document.querySelector('.small-img');
-  let widthOfListImage = 32; // Default width of list images
+  let widthOfListImage = 32; // The width of the small list image( Default is 32px as initially no list images would have been rendered)
   if (listImageElement)
     widthOfListImage = listImageElement.getBoundingClientRect().width;
   const availableWidth = widthOfListItem - widthOfListImage;
   const maxLenOfEachTitle = Math.floor(availableWidth / 8); // 1ch ~ 8px
 
-  console.log(widthOfListItem, maxLenOfEachTitle);
   return maxLenOfEachTitle;
 };
 
 const handleClick = (event) => {
   // This function handles the 'click' event when a list item is clicked
-  let parentListElement;
+
+  let parentListElement; // Get the currently clicked list element, which is the parent for the image element
   if (event.target.tagName.toLowerCase() === 'ul') {
-    return;
+    return; // When clicked on the empty space below list items, nothing should happen
   } else if (event.target.tagName.toLowerCase() === 'li') {
     parentListElement = event.target;
   } else {
     parentListElement = event.target.parentElement;
   }
 
-  const currImageElement = parentListElement.firstElementChild;
+  const currImageElement = parentListElement.firstElementChild; // Get the image present under the currently clicked list element
 
   updateLargeImage(currImageElement.src, currImageElement.alt);
   setActiveImage(parentListElement);
@@ -149,6 +151,7 @@ const handleClick = (event) => {
 const handleKeyPress = (event) => {
   // This function handles when a keyboard arrow up/down is pressed
   const listItems = document.querySelectorAll('li');
+
   if (event.key === 'ArrowDown') {
     listIndex++;
     if (listIndex === listItems.length) listIndex = 0;
@@ -156,8 +159,10 @@ const handleKeyPress = (event) => {
     listIndex--;
     if (listIndex === -1) listIndex = listItems.length - 1;
   }
-  const parentListElement = listItems[listIndex];
-  const currImageElement = parentListElement.firstElementChild;
+
+  const parentListElement = listItems[listIndex]; // Get the currently selected list element, which is the parent for the image element
+  const currImageElement = parentListElement.firstElementChild; // Get the image present under the currently selected list element
+
   updateLargeImage(currImageElement.src, currImageElement.alt);
   setActiveImage(parentListElement);
 };
@@ -172,10 +177,17 @@ const handleResize = () => {
   displayImageList(images, maxLenOfEachTitle);
 };
 
+// Setup 3 event listeners:
+
+// 1) Listen for 'resize' event and as soon as the window is resized, re-render the list items
 window.addEventListener('resize', handleResize);
+
+// 2) Listen for 'click' on the list items
 unorderedListElement.addEventListener('click', handleClick);
+
+// 3) Listen for 'keydown' for navigating using arrow keys
 document.addEventListener('keydown', handleKeyPress);
 
-// Render the list items
+// Render the initial list items
 const maxLenOfEachTitle = getMaxLenOfEachTitle();
 displayImageList(images, maxLenOfEachTitle);
