@@ -75,7 +75,7 @@ const displayImageList = (imageList, maxLenOfEachTitle) => {
       maxLenOfEachTitle
     );
     if (index === listIndex) {
-      listElement.classList.add('active'); // By default, first list item is active
+      listElement.classList.add('active'); // By default, list item at 'listIndex' is active
     }
     unorderedListElement.appendChild(listElement);
   });
