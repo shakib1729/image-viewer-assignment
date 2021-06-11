@@ -74,12 +74,15 @@ const displayImageList = (imageList, maxLenOfEachTitle) => {
       img.title,
       maxLenOfEachTitle
     );
-    if (index === 0) {
+    if (index === listIndex) {
       listElement.classList.add('active'); // By default, first list item is active
     }
     unorderedListElement.appendChild(listElement);
   });
-  createLargeImage(imageList[0].previewImage, imageList[0].title);
+  createLargeImage(
+    imageList[listIndex].previewImage,
+    imageList[listIndex].title
+  );
 };
 
 const setActiveImage = (element) => {
@@ -120,7 +123,7 @@ const getMaxLenOfEachTitle = () => {
 
   const widthOfListItem = unorderedListElement.getBoundingClientRect().width; // The width of parent list container
   const listImageElement = document.querySelector('.small-img');
-  let widthOfListImage = 32; // The width of the small list image( Default is 32px as initially no list images would have been rendered)
+  let widthOfListImage = 32; // The width of the small list image (Default is 32px as initially no list images would have been rendered)
   if (listImageElement)
     widthOfListImage = listImageElement.getBoundingClientRect().width;
   const availableWidth = widthOfListItem - widthOfListImage;
