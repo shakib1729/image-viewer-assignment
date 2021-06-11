@@ -64,7 +64,12 @@ const truncateTitle = (listElement) => {
   let titleWidth = titleElement.getBoundingClientRect().width;
   const imageWidth = imageElement.getBoundingClientRect().width;
 
-  if (availableWidth >= titleWidth + imageWidth + 16) {
+  const style = getComputedStyle(listElement);
+
+  const paddingValue = parseInt(style.getPropertyValue('padding-right'));
+  const paddingOffset = paddingValue * 2;
+
+  if (availableWidth >= titleWidth + imageWidth + paddingOffset) {
     return; // If no truncation is required, then return
   }
 
@@ -73,7 +78,7 @@ const truncateTitle = (listElement) => {
       title.slice(0, length) + '...' + title.slice(title.length - length);
     titleElement.innerText = truncated;
     titleWidth = titleElement.getBoundingClientRect().width;
-    if (availableWidth >= titleWidth + imageWidth + 16) {
+    if (availableWidth >= titleWidth + imageWidth + paddingOffset) {
       break;
     }
   }
