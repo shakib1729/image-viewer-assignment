@@ -22,6 +22,7 @@ main {
 .img-list-container {
   width: 30%;
   margin-bottom: 1rem;
+  margin-right: 0.5rem;
 }
 
 .img-container {
@@ -48,11 +49,12 @@ main {
 .small-img {
   height: 2rem;
   width: 2rem;
+  padding-right: 4px;
   object-fit: cover;
 }
 
 .list-item h4 {
-  padding-left: 1rem;
+  /* padding-left: 1rem; */
   white-space: nowrap;
 }
 
@@ -69,6 +71,7 @@ main {
   height: 100%;
   width: 100%;
   object-fit: cover;
+  border-radius: 0.6rem;
 }
 
 .large-img-title {
