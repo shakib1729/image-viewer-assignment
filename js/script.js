@@ -16,20 +16,6 @@ const createImage = (imageSource, imageTitle) => {
   return imgElement;
 };
 
-const truncate = (str, maxLen) => {
-  // This function truncates the title if its length is greater than 'maxLen'
-  const currLen = str.length;
-  if (currLen <= maxLen) return str;
-
-  const leftHalf = Math.floor(maxLen / 2) - 1,
-    rightHalf = Math.floor(maxLen / 2) - 2;
-
-  const newStr =
-    str.slice(0, leftHalf) + '...' + str.slice(currLen - rightHalf);
-
-  return newStr;
-};
-
 const createTitle = (imageTitle) => {
   // This function creates a <h4> element
   const titleElement = document.createElement('h4');
@@ -37,15 +23,14 @@ const createTitle = (imageTitle) => {
   return titleElement;
 };
 
-const createListElement = (imageSource, imageTitle, maxLenOfEachTitle) => {
+const createListElement = (imageSource, imageTitle) => {
   // This function creates a <li> element
   // which contains <img> and <h4> elements
   // <img> contains the image
   // <h4> contains the title of the image
   const listElement = document.createElement('li');
   const imgElement = createImage(imageSource, imageTitle);
-  const truncatedTitle = truncate(imageTitle, maxLenOfEachTitle); // Get the truncated title
-  const titleElement = createTitle(truncatedTitle);
+  const titleElement = createTitle(imageTitle);
 
   listElement.classList.add('list-item');
   imgElement.classList.add('small-img');
@@ -68,19 +53,52 @@ const createLargeImage = (imageSource, imageTitle) => {
   largeImageTitleElement.appendChild(titleElement);
 };
 
-const displayImageList = (imageList, maxLenOfEachTitle) => {
+const truncateTitle = (listElement) => {
+  // This function truncates the title of the 'listElement'
+  // which is passed as argument
+  const imageElement = listElement.firstElementChild;
+  const titleElement = listElement.lastElementChild;
+  const title = titleElement.innerText;
+  const availableWidth = listElement.getBoundingClientRect().width; // The max available width for this item
+
+  let titleWidth = titleElement.getBoundingClientRect().width;
+  const imageWidth = imageElement.getBoundingClientRect().width;
+
+  if (availableWidth >= titleWidth + imageWidth) {
+    return; // If no truncation is required, then return
+  }
+
+  for (let length = title.length / 2; length > 0; length--) {
+    const truncated =
+      title.slice(0, length) + '...' + title.slice(title.length - length);
+    titleElement.innerText = truncated;
+    titleWidth = titleElement.getBoundingClientRect().width;
+    if (availableWidth >= titleWidth + imageWidth) {
+      break;
+    }
+  }
+};
+
+const truncateImageList = () => {
+  const listItems = document.querySelectorAll('li');
+  listItems.forEach((item) => {
+    truncateTitle(item);
+  });
+};
+
+const displayImageList = (imageList) => {
   // This function renders all the images in the list
   imageList.forEach((img, index) => {
-    const listElement = createListElement(
-      img.previewImage,
-      img.title,
-      maxLenOfEachTitle
-    );
+    const listElement = createListElement(img.previewImage, img.title);
     if (index === listIndex) {
       listElement.classList.add('active'); // By default, list item at 'listIndex' is active
     }
     unorderedListElement.appendChild(listElement);
   });
+
+  // Truncate the titles in the list
+  truncateImageList();
+
   createLargeImage(
     imageList[listIndex].previewImage,
     imageList[listIndex].title
@@ -114,22 +132,6 @@ const updateListIndex = (imgElement) => {
       listIndex = index;
     }
   });
-};
-
-const getMaxLenOfEachTitle = () => {
-  // This function calculates the maximum number of characters
-  // which should be present in the list item title
-  // based on the available width for the list element
-
-  const widthOfListItem = unorderedListElement.getBoundingClientRect().width; // The width of parent list container
-  const listImageElement = document.querySelector('.small-img');
-  let widthOfListImage = 32; // The width of the small list image (Default is 32px as initially no list images would have been rendered)
-  if (listImageElement)
-    widthOfListImage = listImageElement.getBoundingClientRect().width;
-  const availableWidth = widthOfListItem - widthOfListImage;
-  const maxLenOfEachTitle = Math.floor(availableWidth / 8); // 1ch ~ 8px
-
-  return maxLenOfEachTitle;
 };
 
 const handleClick = (event) => {
@@ -176,9 +178,7 @@ const handleResize = () => {
   largeImageContainerElement.innerHTML = '';
   largeImageTitleElement.innerHTML = '';
 
-  const maxLenOfEachTitle = getMaxLenOfEachTitle();
-
-  displayImageList(images, maxLenOfEachTitle);
+  displayImageList(images);
 };
 
 // Setup 3 event listeners:
@@ -193,5 +193,4 @@ unorderedListElement.addEventListener('click', handleClick);
 document.addEventListener('keydown', handleKeyPress);
 
 // Render the initial list items
-const maxLenOfEachTitle = getMaxLenOfEachTitle();
-displayImageList(images, maxLenOfEachTitle);
+displayImageList(images);
