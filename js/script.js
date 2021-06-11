@@ -67,7 +67,7 @@ const truncateTitle = (listElement) => {
   const style = getComputedStyle(listElement);
 
   const paddingValue = parseInt(style.getPropertyValue('padding-right'));
-  const paddingOffset = paddingValue * 2;
+  const paddingOffset = Math.max(24, paddingValue * 2);
 
   if (availableWidth >= titleWidth + imageWidth + paddingOffset) {
     return; // If no truncation is required, then return
@@ -89,10 +89,6 @@ const truncateImageList = () => {
   listItems.forEach((item) => {
     truncateTitle(item);
   });
-  if (document.URL.indexOf('#') == -1) {
-    location += '#';
-    location.reload(); // Refresh the page only once to render the update elements
-  }
 };
 
 const displayImageList = (imageList) => {
