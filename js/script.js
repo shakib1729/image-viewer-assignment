@@ -89,6 +89,10 @@ const truncateImageList = () => {
   listItems.forEach((item) => {
     truncateTitle(item);
   });
+  if (document.URL.indexOf('#') == -1) {
+    location += '#';
+    location.reload(); // Refresh the page only once to render the update elements
+  }
 };
 
 const displayImageList = (imageList) => {
