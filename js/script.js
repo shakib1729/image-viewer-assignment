@@ -1,8 +1,10 @@
 import images from './imagesData.js';
 
-const mainElement = document.getElementById('main');
 const unorderedListElement = document.querySelector('.img-list');
-const largeImageContainerElement = document.querySelector('.img-container');
+const largeImageContainerElement = document.querySelector(
+  '.large-img-container'
+);
+const largeImageTitleElement = document.querySelector('.large-img-title');
 
 let listIndex = 0; // The index of currently selected list item
 
@@ -63,7 +65,7 @@ const createLargeImage = (imageSource, imageTitle) => {
   imgElement.classList.add('large-img');
 
   largeImageContainerElement.appendChild(imgElement);
-  largeImageContainerElement.appendChild(titleElement);
+  largeImageTitleElement.appendChild(titleElement);
 };
 
 const displayImageList = (imageList, maxLenOfEachTitle) => {
@@ -98,12 +100,10 @@ const setActiveImage = (element) => {
 
 const updateLargeImage = (imageSource, imageName) => {
   // This function sets the large image and its title
-  const largeImageElement = largeImageContainerElement.firstElementChild;
-  const largeImageTextElement = largeImageElement.nextElementSibling;
+  largeImageContainerElement.innerHTML = '';
+  largeImageTitleElement.innerHTML = '';
 
-  largeImageElement.src = imageSource;
-  largeImageElement.alt = imageName;
-  largeImageTextElement.innerText = imageName;
+  createLargeImage(imageSource, imageName);
 };
 
 const updateListIndex = (imgElement) => {
@@ -174,6 +174,7 @@ const handleResize = () => {
   // This function re-renders the list items when the window is resized
   unorderedListElement.innerHTML = '';
   largeImageContainerElement.innerHTML = '';
+  largeImageTitleElement.innerHTML = '';
 
   const maxLenOfEachTitle = getMaxLenOfEachTitle();
 
