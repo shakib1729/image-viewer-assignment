@@ -58,7 +58,7 @@ ul {
 
 .list-item h4 {
   padding-left: 1rem;
-  text-overflow: clip;
+  white-space: nowrap;
 }
 
 h4 {
