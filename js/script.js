@@ -25,18 +25,21 @@ const createTitle = (imageTitle) => {
 
 const createListElement = (imageSource, imageTitle) => {
   // This function creates a <li> element
-  // which contains <img> and <h4> elements
+  // which contains <img> and <div> elements
   // <img> contains the image
-  // <h4> contains the title of the image
+  // <div> contains <h4> which is the title of the image
   const listElement = document.createElement('li');
   const imgElement = createImage(imageSource, imageTitle);
   const titleElement = createTitle(imageTitle);
+  const titleElementContainer = document.createElement('div');
+  titleElementContainer.appendChild(titleElement);
 
   listElement.classList.add('list-item');
   imgElement.classList.add('small-img');
+  titleElementContainer.classList.add('title-container');
 
   listElement.appendChild(imgElement);
-  listElement.appendChild(titleElement);
+  listElement.appendChild(titleElementContainer);
 
   return listElement;
 };
@@ -56,20 +59,15 @@ const createLargeImage = (imageSource, imageTitle) => {
 const truncateTitle = (listElement) => {
   // This function truncates the title of the 'listElement'
   // which is passed as argument
-  const imageElement = listElement.firstElementChild;
-  const titleElement = listElement.lastElementChild;
+
+  const titleElementContainer = listElement.lastElementChild;
+  const titleElement = titleElementContainer.firstElementChild;
   const title = titleElement.innerText;
-  const availableWidth = listElement.getBoundingClientRect().width; // The max available width for this item
+  const availableWidth = titleElementContainer.getBoundingClientRect().width; // The max available width for this title
 
-  let titleWidth = titleElement.getBoundingClientRect().width;
-  const imageWidth = imageElement.getBoundingClientRect().width;
+  let titleWidth = titleElement.getBoundingClientRect().width; // The current width of the title
 
-  const style = getComputedStyle(listElement);
-
-  const paddingValue = parseInt(style.getPropertyValue('padding-right'));
-  const paddingOffset = Math.max(24, paddingValue * 2);
-
-  if (availableWidth >= titleWidth + imageWidth + paddingOffset) {
+  if (availableWidth >= titleWidth) {
     return; // If no truncation is required, then return
   }
 
@@ -78,13 +76,15 @@ const truncateTitle = (listElement) => {
       title.slice(0, length) + '...' + title.slice(title.length - length);
     titleElement.innerText = truncated;
     titleWidth = titleElement.getBoundingClientRect().width;
-    if (availableWidth >= titleWidth + imageWidth + paddingOffset) {
+    if (availableWidth >= titleWidth) {
       break;
     }
   }
 };
 
 const truncateImageList = () => {
+  // This function goes to all the list images
+  // and truncates the text which is overflowing
   const listItems = document.querySelectorAll('li');
   listItems.forEach((item) => {
     truncateTitle(item);
@@ -147,8 +147,13 @@ const handleClick = (event) => {
     return; // When clicked on the empty space below list items, nothing should happen
   } else if (event.target.tagName.toLowerCase() === 'li') {
     parentListElement = event.target;
-  } else {
+  } else if (
+    event.target.tagName.toLowerCase() === 'img' ||
+    event.target.tagName.toLowerCase() === 'div'
+  ) {
     parentListElement = event.target.parentElement;
+  } else if (event.target.tagName.toLowerCase() === 'h4') {
+    parentListElement = event.target.parentElement.parentElement;
   }
 
   const currImageElement = parentListElement.firstElementChild; // Get the image present under the currently clicked list element
