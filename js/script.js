@@ -83,8 +83,8 @@ const truncateTitle = (listElement) => {
 };
 
 const truncateImageList = () => {
-  // This function goes to all the list images
-  // and truncates the text which is overflowing
+  // This function loops through all the list items
+  // and truncates the title which is overflowing
   const listItems = document.querySelectorAll('li');
   listItems.forEach((item) => {
     truncateTitle(item);
