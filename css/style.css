@@ -88,6 +88,17 @@ h4 {
   font-weight: normal;
 }
 
+.title-container {
+  width: 88%;
+}
+.title-container h4 {
+  display: inline-block;
+}
+
+.small-img {
+  width: 12%;
+}
+
 @media screen and (max-width: 1250px) {
   main {
     width: 90%;
