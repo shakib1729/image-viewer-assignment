@@ -98,7 +98,7 @@ const truncateTitle = (listElement) => {
     return; // If no truncation is required, then return
   }
 
-  // Applying Binary Search to find the largest length
+  // Applying Binary Search to find the largest string
   // which fits inside the container
   const truncatedTitle = getMaxPossibleStringBinarySearch(
     title,
