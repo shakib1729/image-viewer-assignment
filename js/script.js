@@ -56,7 +56,7 @@ const createLargeImage = (imageSource, imageTitle) => {
   largeImageTitleElement.appendChild(titleElement);
 };
 
-const getMaxPossibleLengthBinarySearch = (
+const getMaxPossibleStringBinarySearch = (
   title,
   titleElement,
   availableWidth
@@ -100,7 +100,7 @@ const truncateTitle = (listElement) => {
 
   // Applying Binary Search to find the largest length
   // which fits inside the container
-  const truncatedTitle = getMaxPossibleLengthBinarySearch(
+  const truncatedTitle = getMaxPossibleStringBinarySearch(
     title,
     titleElement,
     availableWidth
