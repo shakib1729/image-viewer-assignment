@@ -56,6 +56,33 @@ const createLargeImage = (imageSource, imageTitle) => {
   largeImageTitleElement.appendChild(titleElement);
 };
 
+const getMaxPossibleLengthBinarySearch = (
+  title,
+  titleElement,
+  availableWidth
+) => {
+  let start = 1,
+    end = title.length / 2;
+
+  let selectedText;
+
+  while (start <= end) {
+    const mid = Math.floor((start + end) / 2);
+    const truncated =
+      title.slice(0, mid) + '...' + title.slice(title.length - mid);
+    titleElement.innerText = truncated;
+    const titleWidth = titleElement.getBoundingClientRect().width;
+    if (titleWidth <= availableWidth) {
+      start = mid + 1;
+      selectedText = truncated;
+    } else {
+      end = mid - 1;
+    }
+  }
+
+  return selectedText;
+};
+
 const truncateTitle = (listElement) => {
   // This function truncates the title of the 'listElement'
   // which is passed as argument
@@ -65,21 +92,20 @@ const truncateTitle = (listElement) => {
   const title = titleElement.innerText;
   const availableWidth = titleElementContainer.getBoundingClientRect().width; // The max available width for this title
 
-  let titleWidth = titleElement.getBoundingClientRect().width; // The current width of the title
+  const titleWidth = titleElement.getBoundingClientRect().width; // The current width of the title
 
   if (availableWidth >= titleWidth) {
     return; // If no truncation is required, then return
   }
 
-  for (let length = title.length / 2; length > 0; length--) {
-    const truncated =
-      title.slice(0, length) + '...' + title.slice(title.length - length);
-    titleElement.innerText = truncated;
-    titleWidth = titleElement.getBoundingClientRect().width;
-    if (availableWidth >= titleWidth) {
-      break;
-    }
-  }
+  // Applying Binary Search to find the largest length
+  // which fits inside the container
+  const truncatedTitle = getMaxPossibleLengthBinarySearch(
+    title,
+    titleElement,
+    availableWidth
+  );
+  titleElement.innerText = truncatedTitle;
 };
 
 const truncateImageList = () => {
