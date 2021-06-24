@@ -56,7 +56,7 @@ main {
 }
 
 .list-item h4 {
-  white-space: nowrap;
+  /* white-space: nowrap; */
   width: 80%;
 }
 
