@@ -59,7 +59,8 @@ const createLargeImage = (imageSource, imageTitle) => {
 const getMaxPossibleStringBinarySearch = (
   title,
   titleElement,
-  availableWidth
+  titleElementContainer,
+  availableHeight
 ) => {
   let start = 1,
     end = title.length / 2;
@@ -71,8 +72,8 @@ const getMaxPossibleStringBinarySearch = (
     const truncated =
       title.slice(0, mid) + '...' + title.slice(title.length - mid);
     titleElement.innerText = truncated;
-    const titleWidth = titleElement.getBoundingClientRect().width;
-    if (titleWidth <= availableWidth) {
+    const titleHeight = titleElementContainer.scrollHeight;
+    if (titleHeight <= availableHeight) {
       start = mid + 1;
       selectedText = truncated;
     } else {
@@ -90,11 +91,11 @@ const truncateTitle = (listElement) => {
   const titleElementContainer = listElement.lastElementChild;
   const titleElement = titleElementContainer.firstElementChild;
   const title = titleElement.innerText;
-  const availableWidth = titleElementContainer.getBoundingClientRect().width; // The max available width for this title
+  const availableHeight = listElement.getBoundingClientRect().height; // The max available height for this title
 
-  const titleWidth = titleElement.getBoundingClientRect().width; // The current width of the title
+  const titleHeight = titleElementContainer.scrollHeight; // The current height of the title
 
-  if (availableWidth >= titleWidth) {
+  if (availableHeight >= titleHeight) {
     return; // If no truncation is required, then return
   }
 
@@ -103,7 +104,8 @@ const truncateTitle = (listElement) => {
   const truncatedTitle = getMaxPossibleStringBinarySearch(
     title,
     titleElement,
-    availableWidth
+    titleElementContainer,
+    availableHeight
   );
   titleElement.innerText = truncatedTitle;
 };
