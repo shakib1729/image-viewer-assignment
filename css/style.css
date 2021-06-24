@@ -45,7 +45,7 @@ main {
   padding: 0.25rem;
   align-items: center;
   justify-content: space-evenly;
-  max-height: 4.5rem;
+  max-height: 4rem;
 }
 
 .small-img {
@@ -57,7 +57,7 @@ main {
 
 .list-item h4 {
   /* white-space: nowrap; */
-  width: 80%;
+  width: 100%;
 }
 
 .list-item.active {
