@@ -45,12 +45,12 @@ main {
   padding: 0.25rem;
   align-items: center;
   justify-content: space-evenly;
-  height: 4rem;
+  max-height: 4.5rem;
 }
 
 .small-img {
-  height: 3rem;
-  width: 3rem;
+  height: 2.5rem;
+  width: 2.5rem;
   padding-right: 4px;
   object-fit: cover;
 }
